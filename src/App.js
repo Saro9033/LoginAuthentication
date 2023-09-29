@@ -1,24 +1,19 @@
 import React from 'react';
 import Home from './Components/home';
-import { Route, Routes } from 'react-router-dom';
-import Contact from './Components/contact';
-import About from './Components/about';
 import './App.css'
 import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
 
 function App() {
 
-    return(
-      <>
-        <Navbar/> 
-        <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        </Routes>    
-      </>
-    );
-  }
+  return (
+    <div className='bg-dark text-light'>
+      <Navbar />
+      <Home />
+      <Footer/>
+    </div>
+  );
+}
 
 
 

@@ -1,32 +1,57 @@
-import React from "react";
-import Search from "./search";
-import ImageList from "./imageList";
-import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import Item from './Item'
+
+const Home = () => {
+  const [image, setImage] = useState([])
+  const [show, setShow] = useState(12)
+  const [isLoad, setIsLoad] = useState(true)
+  const [err, setErr] = useState(null)
 
 
-class home extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = {images : []}
-        this.onSearchSubmit = this.onSearchSubmit.bind(this)
+  useEffect(()=>{
+    const Fetching = async ()=>{
+      try {
+       const response = await axios.get(`https://jsonplaceholder.typicode.com/photos`)
+       setImage(response.data)
+       
+      } catch (error) {
+        setErr(error.message)
+      }finally{
+        setIsLoad(false)
       }
- 
-    async onSearchSubmit(entry){
-      const response = await axios.get(`https://pixabay.com/api/?key=37975666-90ce9aef9164d568a312d783f&q=${entry}&image_type=photo&pretty=true`)
-      this.setState({images:response.data.hits})
-      console.log(response.data.hits)  
-  
     }
+    Fetching()
+  }, [])
 
-render(){
-    return(
-        <div >
-     <Search onSearchSubmit={this.onSearchSubmit}/>
-        <ImageList images={this.state.images} />
-       </div>
-    )
+  const loadMore = () => {
+    setShow(show + 12); // Load 10 more items
+  };
+
+
+
+  return (
+
+<div className='container  d-flex justify-content-center align-items-center flex-column mt-5 mb-5'>
+  {isLoad && <h2 className='text-align mt-5'>Loading...</h2>}
+  {err && <h2 className='text-align mt-5'>{err}</h2>}
+
+
+  {!isLoad && !err &&
+  <>  <ul className='list-unstyled row'>
+      {image.slice(0, show).map(img => (
+          <Item key={img.id} img={img} />
+      ))}
+    </ul>
+  
+<button className='btn mt-5 btn-primary' onClick={loadMore}>
+  Load more..
+</button> </> }
+
+</div>  
+
+  )
 }
-}
 
+export default Home
 
-export default home

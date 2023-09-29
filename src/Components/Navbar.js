@@ -1,17 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom"
 
 const Navbar = () => {
-  const sty = {padding:'0 15px 0 15px', textDecoration:'none', color:'white', fontSize:'17px'}
     return (
-        <div className="navContainer">
-            <h3>Search Images </h3>
-            <div className="navList">
-                <Link style={sty} to="/">Home</Link>
-                <Link style={sty} to="/about">About</Link>
-                <Link style={sty} to="/contact">Contact</Link>
-            </div>
+         <nav id='navbar' className="navbar px-1 navbar-dark " style={{ background: 'black', color: 'white', zIndex: '1', position: 'sticky', top: '0' }}   >
+    <div className="container-fluid">
+        <a href='/' className="navbar-brand text-dark bg-info rounded-3 px-2" >
+            Fetch
+        </a>
+
+        <div className="justify-content-end " >
+            <ul className="navbar-nav ">
+                <li className="nav-item ">
+                <a className="nav-link p-1 text-light rounded-2 mx-1" href='/' >Home </a>
+                </li>
+            </ul>
         </div>
+    </div>
+</nav> 
     );
 }
 
