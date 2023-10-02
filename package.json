@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "homepage": "http://Saro9033.github.io/Img_Fetch_senchola",
+  "homepage": "http://Saro9033.github.io/CRUD_operation",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
