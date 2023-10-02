@@ -1,55 +1,55 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import Item from './Item'
+import React, { useContext } from 'react'
+import ShowItems from './ShowItems'
+import { DataContext } from '../Context.js/DataContext'
 
 const Home = () => {
-  const [image, setImage] = useState([])
-  const [show, setShow] = useState(12)
-  const [isLoad, setIsLoad] = useState(true)
-  const [err, setErr] = useState(null)
 
+  const { setShowModel, items, setUpdate, err, isLoad } = useContext(DataContext)
 
-  useEffect(()=>{
-    const Fetching = async ()=>{
-      try {
-       const response = await axios.get(`https://jsonplaceholder.typicode.com/photos`)
-       setImage(response.data)
-       
-      } catch (error) {
-        setErr(error.message)
-      }finally{
-        setIsLoad(false)
-      }
-    }
-    Fetching()
-  }, [])
-
-  const loadMore = () => {
-    setShow(show + 12); // Load 10 more items
-  };
-
-
+  const Submit = (e) => {
+    e.preventDefault()
+    setUpdate(-1)
+  }
 
   return (
+    <>
+    {err && <h2 className='text-center mt-4'>Error: {err}</h2>}
+    {isLoad && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+  <div className='mt-5' id='loader'></div>
+</div>
+}
 
-<div className='container  d-flex justify-content-center align-items-center flex-column mt-5 mb-5'>
-  {isLoad && <h2 className='text-align mt-5'>Loading...</h2>}
-  {err && <h2 className='text-align mt-5'>{err}</h2>}
+    {!err && !isLoad && 
+    <div className='container mt-5 mb-5'>
+      <div className="dot-elastic"></div>
+      
+    
+      <div className='d-flex justify-content-end'><button className='btn btn-success ' onClick={() => setShowModel(true)}>
+        Add Items
+      </button></div>
+      <div className="table-responsive">
+        <form onSubmit={Submit}>
+          <table className="table table-light">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Password</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map(item => {
+                return <ShowItems item={item} key={item.id} />
 
-
-  {!isLoad && !err &&
-  <>  <ul className='list-unstyled row'>
-      {image.slice(0, show).map(img => (
-          <Item key={img.id} img={img} />
-      ))}
-    </ul>
-  
-<button className='btn mt-5 btn-primary' onClick={loadMore}>
-  Load more..
-</button> </> }
-
-</div>  
-
+              })}
+            </tbody>
+          </table>
+        </form>
+      </div>
+    </div> }
+    </>
   )
 }
 
