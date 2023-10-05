@@ -1,22 +1,26 @@
 import React from 'react';
-import Home from './Components/home';
-import './App.css'
-import Navbar from './Components/Navbar';
-import Footer from './Components/Footer';
-import AddItems from './Components/AddItems';
-
 import { DataProvider } from './Context.js/DataContext';
+import { Route, Routes } from 'react-router'
+import './App.css'
+import Home from './Components/home';
+import { ToastContainer } from 'react-toastify'
+import Login from './Components/Login';
+import Register from './Components/Register';
+import User from './Components/User';
 
 function App() {
   return (
-    <div>
-
-      <Navbar />
+    <div className='App'>
       <DataProvider>
-        <Home />
-        <AddItems />
+        <ToastContainer theme='colored'></ToastContainer>
+        <Login />
+        <Register />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/user' element={<User />} />
+        </Routes>
       </DataProvider>
-      <Footer />
+
     </div>
   );
 }

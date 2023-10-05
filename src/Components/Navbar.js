@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
+import Net from '../netflix.png'
+import { DataContext } from "../Context.js/DataContext";
 
-const Navbar = () => {
+const Navbar = (bg) => {
+    const {openModal} = useContext(DataContext)
+
+    
     return (
-        <nav id='navbar' className="navbar px-1 navbar-dark " style={{ background: 'black', color: 'white', position: 'sticky', top: '0' }}   >
+        <nav id='navbar' className="navbar px-1 navbar-dark" style={ { background: 'transparent', color: 'white', position: 'sticky', top: '0', zIndex:'1' }}   >
             <div className="container-fluid">
-                <a href='/' className="navbar-brand text-dark bg-info rounded-3 px-2" >
-                    CRUD
+                <a href='/' className="navbar-brand text-dark" >
+                    <img src={Net} alt="Logo" width={window.innerWidth < 590 ? '80px': '130px'}/>
                 </a>
 
                 <div className="justify-content-end " >
                     <ul className="navbar-nav ">
                         <li className="nav-item ">
-                            <a className="nav-link p-1 text-light rounded-2 mx-1" href='/' >Home </a>
+                            <button className="nav-link px-3 py-2 text-light bg-danger rounded-2 mx-1" onClick={openModal} >Signup </button>
                         </li>
                     </ul>
                 </div>

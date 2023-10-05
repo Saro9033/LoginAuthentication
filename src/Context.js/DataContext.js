@@ -1,105 +1,216 @@
 import { createContext } from "react";
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-
+import React, {useState,useEffect } from 'react';
+import { toast } from "react-toastify";
+import {useNavigate} from 'react-router'
+import 'react-toastify/dist/ReactToastify.css'
+import axios from 'axios'
 
 export const DataContext = createContext({})
 
 export const DataProvider = ({children}) =>{
-    const [items, setItems] = useState([])
-    const [showModel, setShowModel] = useState(false)
-    const [newName, setNewName] = useState('')
-    const [newEmail, setNewEmail] = useState('')
-    const [newPass, setNewPass] = useState('')
-    const [update, setUpdate] = useState(-1)
+  const [id, setId] = useState('')
+  const [name, setName] = useState('')
+  const [pass, setPass]= useState('')
+  const [email, setEmail]= useState('')
+  const [phone, setPhone]= useState('')
+  const [country, setCountry]= useState('India')
+  const [address, setAddress]= useState('')
+
+  const [showModal, setShowModal] = useState(false);
+
+  const [showModal2, setShowModal2] = useState(false);
+
+
+  const navigation = useNavigate()
   
-    const [updateName, setUpdateName] = useState('')
-    const [updateEmail, setUpdateEmail] = useState('')
-    const [updatePass, setUpdatePass] = useState('')
-  
-  
-    const URL = 'https://crud-oper-api.onrender.com/items'
-    const [err, setErr] = useState(null)
-    const [isLoad, setIsLoad] = useState(true)
-  
-  useEffect(()=>{
-    const Fetching = async()=>{
+
+
+//   const handleSubmit= async (e)=>{
+    
+
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    let obj = { id, name, pass, email, phone, country, address };
+    if (IsValidate()) {
       try {
-        const res =await axios.get(URL)
-        setItems(res.data)   
+        await axios.post("https://login-auth-api-oz6r.onrender.com/user", obj, {
+          headers: { 'content-type': 'application/json' },
+        });
+        toast.success('Registered Successfully!');
+        hanldeBack();
       } catch (error) {
-        setErr(error.message);
-      } finally{
-        setIsLoad(false)
+        toast.err('Failed :', error.message);
       }
     }
-    Fetching()
-  },[])
-  
-  
-  const closeModel = ()=> setShowModel(false)
-  
-  const  handleSubmit = async (e)=>{
-    e.preventDefault()
-    try {
-      const id = items.length ? items[items.length - 1].id + 1 : 1;
-      const newItems = {id, name:newName, email:newEmail, pass:newPass}
-      const res = await axios.post(URL, newItems )
-      setItems([...items, res.data])
-      setNewName('')
-      setNewEmail('')
-      setNewPass('')
-      closeModel()
-    } catch (error) {
-      setErr(error.message);
-    } 
   }
   
-  const handleDelete = async (id) =>{
-    try {
-      await axios.delete(`${URL}/${id}`)
-     const DeletedItem = items.filter(item => item.id !== id)
-     setItems(DeletedItem)
-    } catch (error) {
-      setErr(error.message);
-    } 
-  }
-  
-  const handleUpdate = async (id) => {
-    try {
-      const updatePost = { id, name: updateName, email: updateEmail, pass: updatePass };
-      const res = await axios.put(`${URL}/${id}`, updatePost);
-  
-      setItems((prevItems) =>
-        prevItems.map((item) => (item.id === id ? { ...item, ...res.data } : item))
-      );
-  
-      setUpdate(-1); // Reset the update state to -1 to indicate no item is being edited
-      setUpdateName('');
-      setUpdateEmail('');
-      setUpdatePass('');
-    } catch (error) {
-      setErr(error.message);
+
+  const IsValidate = () => {
+    let isproceed = true;
+    let errormessage = 'Please enter the value in ';
+    if (id === null || id === '') {
+        isproceed = false;
+        errormessage += ' Username';
     }
-  };
-  
-  
-  const handleEdit = (id) =>{
-    setUpdate(id)
+    if (name === null || name === '') {
+        isproceed = false;
+        errormessage += ' Fullname';
+    }
+    if (pass === null || pass === '') {
+        isproceed = false;
+        errormessage += ' Password';
+    }
+    if (email === null || email === '') {
+        isproceed = false;
+        errormessage += ' Email';
+    }
+
+    if(!isproceed){
+        toast.warning(errormessage)
+    }else{
+        if(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)){
+
+        }else{
+            isproceed = false;
+            toast.warning('Please enter the valid email')
+        }
+    }
+    return isproceed;
+}
+
+  //Login page
+  const [username, usernameupdate] = useState('');
+  const [password, passwordupdate] = useState('');
+
+
+  useEffect(()=>{
+sessionStorage.clear();
+  },[]);
+
+  const ProceedLogin = async (e) => {
+    e.preventDefault();
+    if (validate()) {
+      try {
+        const res = await axios.get(`https://login-auth-api-oz6r.onrender.com/user/${username}`);
+        const resp = res.data;
+        console.log(resp);
+        if (Object.keys(resp).length === 0) {
+          toast.error('Please Enter valid username');
+        } else {
+          if (resp.pass === password) {
+            toast.success('Success');
+            sessionStorage.setItem('username', username);
+            sessionStorage.setItem('userrole', resp.role);
+            navigation('/user');
+            closeModal();
+          } else {
+            toast.error('Please Enter valid credentials');
+          }
+        }
+      } catch (error) {
+        toast.error('Login Failed due to :' + error.message);
+      }
+    }
   }
   
+
+  const ProceedLoginusingAPI = (e) => {
+      e.preventDefault();
+      if (validate()) {
+          ///implentation
+          // console.log('proceed');
+          let inputobj={"username": username,
+          "password": password};
+          fetch("https://localhost:44308/User/Authenticate",{
+              method:'POST',
+              headers:{'content-type':'application/json'},
+              body:JSON.stringify(inputobj)
+          }).then((res) => {
+              return res.json();
+          }).then((resp) => {
+              console.log(resp)
+              if (Object.keys(resp).length === 0) {
+                  toast.error('Login failed, invalid credentials');
+              }else{
+                   toast.success('Success');
+                   sessionStorage.setItem('username',username);
+                   sessionStorage.setItem('jwttoken',resp.jwtToken);
+                   navigation('/user')
+              }
+              // if (Object.keys(resp).length === 0) {
+              //     toast.error('Please Enter valid username');
+              // } else {
+              //     if (resp.password === password) {
+              //         toast.success('Success');
+              //         sessionStorage.setItem('username',username);
+              //         usenavigate('/')
+              //     }else{
+              //         toast.error('Please Enter valid credentials');
+              //     }
+              // }
+          }).catch((err) => {
+              toast.error('Login Failed due to :' + err.message);
+          });
+      }
+  }
+  const validate = () => {
+      let result = true;
+      if (username === '' || username === null) {
+          result = false;
+          toast.warning('Please Enter Username');
+      }
+      if (password === '' || password === null) {
+          result = false;
+          toast.warning('Please Enter Password');
+      }
+      return result;
+  }
+
+  const openModal = () => {
+    setShowModal(true);
+    console.log(showModal);
+
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const openModal2 = () => {
+    setShowModal2(true);
+    console.log(showModal);
+
+  };
+
+  const closeModal2 = () => {
+    setShowModal2(false);
+  };
+
+const  handleNewUser = () =>{
+    setShowModal(false)
+    setShowModal2(true)
+}
+const  hanldeBack = () =>{
+    setShowModal(true)
+    setShowModal2(false)
+}
+
+useEffect(() => {
+    console.log("showModal:", showModal);
+    console.log("showModal2:", showModal2);
+  }, [showModal, showModal2]);
 
     return(
         <DataContext.Provider value={{
+          handleSubmit, id, setId, name, setName,pass, setPass, email, setEmail ,phone, setPhone, country, setCountry,
+          address, setAddress,
 
-          err, isLoad, setIsLoad, setErr, //This data goto App.js 
+          username, usernameupdate, password, passwordupdate, ProceedLogin, ProceedLoginusingAPI,
 
-  setShowModel, items, handleDelete, handleEdit, update, setItems, setUpdate, handleUpdate, updateName, setUpdateName, updateEmail, setUpdateEmail, updatePass, setUpdatePass,         
-           
-           
- closeModel, showModel, newName, setNewName, newEmail, setNewEmail, newPass, setNewPass , handleSubmit
- 
- 
+          showModal,setShowModal,openModal, closeModal, hanldeBack,
+          showModal2, setShowModal2, openModal2, closeModal2, handleNewUser
+          
  }}>
             {children}
         </DataContext.Provider>

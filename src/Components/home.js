@@ -1,55 +1,22 @@
-import React, { useContext } from 'react'
-import ShowItems from './ShowItems'
-import { DataContext } from '../Context.js/DataContext'
+import React from 'react'
+import Navbar from './Navbar'
 
 const Home = () => {
 
-  const { setShowModel, items, setUpdate, err, isLoad } = useContext(DataContext)
-
-  const Submit = (e) => {
-    e.preventDefault()
-    setUpdate(-1)
-  }
-
   return (
-    <>
-    {err && <h2 className='text-center mt-4'>Error: {err}</h2>}
-    {isLoad && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-  <div className='mt-5' id='loader'></div>
-</div>
-}
-
-    {!err && !isLoad && 
-    <div className='container mt-5 mb-5'>
-      <div className="dot-elastic"></div>
-      
-    
-      <div className='d-flex justify-content-end'><button className='btn btn-success ' onClick={() => setShowModel(true)}>
-        Add Items
-      </button></div>
-      <div className="table-responsive">
-        <form onSubmit={Submit}>
-          <table className="table table-light">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Password</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map(item => {
-                return <ShowItems item={item} key={item.id} />
-
-              })}
-            </tbody>
-          </table>
-        </form>
+    <div>
+      <div className='bg-img'>  
+      <Navbar/>
+      <div style={{width:'100%', height:'100vh'}} className=' d-flex align-items-center text-center justify-content-center flex-column text-light'>
+        <h1 className='px-5' style={window.innerWidth < 590 ? {fontSize:'40px'}:{fontSize:'60px'}}>Enjoy big movies, hit series and more from ₹ 149. </h1>
+       <p style={window.innerWidth < 590 ? {fontSize:'16px'}:{fontSize:'23px'}}> 
+        <span>Join today. Cancel anytime.</span> <br />
+        <span>Ready to watch? Enter your email to create or restart your membership.</span></p> 
+        <button  className='btn btn-danger'>Get Started</button>
       </div>
-    </div> }
-    </>
+      </div>
+    </div>
+
   )
 }
 
