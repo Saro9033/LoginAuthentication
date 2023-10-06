@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Navbar from './Navbar'
+import { DataContext } from '../Context.js/DataContext'
 
 const Home = () => {
-
+const {openModal} = useContext(DataContext)
   return (
     <div>
       <div className='bg-img'>  
@@ -12,7 +13,7 @@ const Home = () => {
        <p style={window.innerWidth < 590 ? {fontSize:'16px'}:{fontSize:'23px'}}> 
         <span>Join today. Cancel anytime.</span> <br />
         <span>Ready to watch? Enter your email to create or restart your membership.</span></p> 
-        <button  className='btn btn-danger'>Get Started</button>
+        <button  className='btn btn-danger' onClick={openModal}>Get Started</button>
       </div>
       </div>
     </div>

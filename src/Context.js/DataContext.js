@@ -24,7 +24,6 @@ export const DataProvider = ({children}) =>{
   const navigation = useNavigate()
   
 
-
 //   const handleSubmit= async (e)=>{
     
 
@@ -43,6 +42,13 @@ const handleSubmit = async (e) => {
         toast.err('Failed :', error.message);
       }
     }
+    setId('')
+    setName('')
+    setPass('')
+    setEmail('')
+    setPhone('')
+    setCountry('')
+    setAddress('')
   }
   
 
@@ -112,6 +118,8 @@ sessionStorage.clear();
         toast.error('Login Failed due to :' + error.message);
       }
     }
+    usernameupdate('')
+    passwordupdate('')
   }
   
 
