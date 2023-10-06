@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/LoginAuthentication/static/css/main.ab672fc1.css",
+    "main.js": "/LoginAuthentication/static/js/main.a5889ac8.js",
+    "static/js/787.28cb0dcd.chunk.js": "/LoginAuthentication/static/js/787.28cb0dcd.chunk.js",
+    "static/media/netflix.png": "/LoginAuthentication/static/media/netflix.774e8c1632ac9433608b.png",
+    "index.html": "/LoginAuthentication/index.html",
+    "main.ab672fc1.css.map": "/LoginAuthentication/static/css/main.ab672fc1.css.map",
+    "main.a5889ac8.js.map": "/LoginAuthentication/static/js/main.a5889ac8.js.map",
+    "787.28cb0dcd.chunk.js.map": "/LoginAuthentication/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ab672fc1.css",
+    "static/js/main.a5889ac8.js"
+  ]
+}
